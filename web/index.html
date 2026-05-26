@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoChat - Aplicación de Citas Premium</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a0f2e 50%, #13111c 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        .main-container {
+            display: flex;
+            gap: 60px;
+            max-width: 1600px;
+            align-items: flex-start;
+            width: 100%;
+        }
+
+        /* ===== PHONE FRAME ===== */
+        .phone-wrapper {
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .phone-frame {
+            width: 390px;
+            height: 844px;
+            background: #0a0a0f;
+            border-radius: 60px;
+            border: 14px solid #1a1a1a;
+            box-shadow: 
+                0 0 60px rgba(233, 30, 140, 0.2),
+                0 20px 80px rgba(0, 0, 0, 0.8),
+                inset 0 0 0 1px rgba(168, 85, 247, 0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .phone-frame::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 28px;
+            background: #0a0a0f;
+            border-radius: 0 0 30px 30px;
+            z-index: 100;
+            border: 1px solid rgba(168, 85, 247, 0.2);
+        }
+
+        .notch {
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #fff;
+            font-weight: 600;
+            position: relative;
+            z-index: 50;
+        }
+
+        .screen {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            scroll-behavior: smooth;
+        }
+
+        .screen::-webkit-scrollbar {
+            width: 3px;
+        }
+
+        .screen::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .screen::-webkit-scrollbar-thumb {
+            background: rgba(168, 85, 247, 0.4);
+            border-radius: 2px;
+        }
+
+        .screen-content {
+            flex: 1;
+            display: none;
+            flex-direction: column;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .screen-content.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ===== HOME SCREEN ===== */
+        .home-screen {
+            background: linear-gradient(135deg, #0a0a0f 0%, #13111c 100%);
+        }
+
+        .header {
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.08);
+            background: rgba(10, 10, 15, 0.4);
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #E91E8C, #7C3AED);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+        }
+
+        .premium-btn {
+            background: linear-gradient(135deg, #7C3AED, #EC4899);
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+            letter-spacing: 0.3px;
+        }
+
+        .premium-btn:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(124, 58, 237, 0.5);
+        }
+
+        .premium-btn:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        .card-stack {
+            flex: 1;
+            margin: 16px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            perspective: 1000px;
+        }
+
+        .profile-card {
+            width: 100%;
+            height: 520px;
+            background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(10,10,15,0.95) 100%);
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: 
+                0 8px 32px rgba(168, 85, 247, 0.3),
+                0 0 60px rgba(233, 30, 140, 0.15);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 20px;
+            cursor: grab;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            background-image: linear-gradient(135deg, rgba(233, 30, 140, 0.1) 0%, rgba(124, 58, 237, 0.05) 100%), url('https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=600&fit=crop');
+            background-size: cover;
+            background-position: center;
+            border: 1px solid rgba(168, 85, 247, 0.1);
+        }
+
+        .profile-card:hover {
+            transform: translateY(-4px) scale(1.01);
+            box-shadow: 
+                0 12px 40px rgba(168, 85, 247, 0.4),
+                0 0 80px rgba(233, 30, 140, 0.2);
+        }
+
+        .profile-card:active {
+            cursor: grabbing;
+            transform: scale(0.98);
+        }
+
+        .profile-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, transparent 40%, rgba(10, 10, 15, 0.3) 60%, rgba(10, 10, 15, 0.95) 100%);
+            z-index: 1;
+        }
+
+        .profile-info {
+            position: relative;
+            z-index: 2;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .profile-name {
+            font-size: 28px;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 4px;
+            letter-spacing: -0.5px;
+        }
+
+        .profile-location {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .profile-bio {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 18px;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .interests {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .interest-tag {
+            background: rgba(168, 85, 247, 0.25);
+            border: 1px solid rgba(168, 85, 247, 0.6);
+            color: #E9D5FF;
+            padding: 5px 11px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+            transition: all 0.2s;
+        }
+
+        .interest-tag:hover {
+            background: rgba(168, 85, 247, 0.35);
+            border-color: rgba(168, 85, 247, 0.8);
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding: 24px 20px;
+            align-items: center;
+        }
+
+        .action-btn {
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .btn-nope {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(239, 68, 68, 0.1);
+            border: 2px solid rgba(239, 68, 68, 0.4);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+        }
+
+        .btn-nope:hover {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: rgba(239, 68, 68, 0.7);
+            transform: scale(1.15);
+            box-shadow: 0 8px 20px rgba(239, 68, 68, 0.4);
+        }
+
+        .btn-nope:active {
+            transform: scale(0.95);
+        }
+
+        .btn-super {
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            background: rgba(168, 85, 247, 0.1);
+            border: 2px solid rgba(168, 85, 247, 0.4);
+            box-shadow: 0 4px 12px rgba(168, 85, 247, 0.2);
+        }
+
+        .btn-super:hover {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: rgba(168, 85, 247, 0.7);
+            transform: scale(1.15);
+            box-shadow: 0 8px 20px rgba(168, 85, 247, 0.4);
+        }
+
+        .btn-super:active {
+            transform: scale(0.95);
+        }
+
+        .btn-like {
+            width: 76px;
+            height: 76px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #E91E8C, #7C3AED);
+            border: none;
+            box-shadow: 
+                0 8px 24px rgba(233, 30, 140, 0.4),
+                0 0 40px rgba(124, 58, 237, 0.2);
+        }
+
+        .btn-like:hover {
+            transform: scale(1.12);
+            box-shadow: 
+                0 12px 32px rgba(233, 30, 140, 0.6),
+                0 0 60px rgba(124, 58, 237, 0.3);
+        }
+
+        .btn-like:active {
+            transform: scale(0.95);
+        }
+
+        /* ===== MATCHES SCREEN ===== */
+        .matches-screen {
+            background: linear-gradient(135deg, #0a0a0f 0%, #13111c 100%);
+            padding: 0;
+        }
+
+        .search-header {
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.08);
+            background: rgba(10, 10, 15, 0.4);
+            backdrop-filter: blur(10px);
+        }
+
+        .search-header h2 {
+            font-size: 28px;
+            font-weight: 800;
+            color: white;
+            letter-spacing: -0.5px;
+        }
+
+        .search-icon {
+            width: 36px;
+            height: 36px;
+            background: rgba(168, 85, 247, 0.15);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .search-icon:hover {
+            background: rgba(168, 85, 247, 0.25);
+            border-color: rgba(168, 85, 247, 0.6);
+            transform: scale(1.1);
+        }
+
+        .new-matches {
+            padding: 20px;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.08);
+        }
+
+        .new-matches h3 {
+            font-size: 16px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            letter-spacing: -0.3px;
+        }
+
+        .see-all {
+            color: #A855F7;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .see-all:hover {
+            color: #E91E8C;
+            transform: translateX(2px);
+        }
+
+        .new-matches-list {
+            display: flex;
+            gap: 14px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            scroll-behavior: smooth;
+        }
+
+        .new-matches-list::-webkit-scrollbar {
+            height: 3px;
+        }
+
+        .match-avatar {
+            width: 84px;
+            height: 84px;
+            border-radius: 50%;
+            border: 3px solid #E91E8C;
+            background: linear-gradient(135deg, #E91E8C, #7C3AED);
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(233, 30, 140, 0.3);
+        }
+
+        .match-avatar::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .match-avatar:hover {
+            transform: scale(1.12) translateY(-4px);
+            box-shadow: 0 8px 20px rgba(233, 30, 140, 0.5);
+        }
+
+        .match-avatar:hover::before {
+            opacity: 1;
+        }
+
+        .match-avatar-name {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+            text-align: center;
+            margin-top: 8px;
+            font-weight: 600;
+        }
+
+        .conversations {
+            padding: 0 20px 20px;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .conversations h3 {
+            font-size: 16px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 12px;
+            margin-top: 8px;
+            letter-spacing: -0.3px;
+        }
+
+        .conversation-item {
+            display: flex;
+            gap: 12px;
+            padding: 12px;
+            background: rgba(168, 85, 247, 0.05);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 14px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .conversation-item:hover {
+            background: rgba(168, 85, 247, 0.12);
+            border-color: rgba(168, 85, 247, 0.3);
+            transform: translateX(4px);
+            box-shadow: 0 4px 12px rgba(168, 85, 247, 0.15);
+        }
+
+        .conversation-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #E91E8C, #7C3AED);
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 2px 8px rgba(233, 30, 140, 0.2);
+        }
+
+        .conversation-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .conversation-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 4px;
+        }
+
+        .conversation-message {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .conversation-meta {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 4px;
+        }
+
+        .conversation-time {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.5);
+            font-weight: 500;
+        }
+
+        .unread-badge {
+            width: 22px;
+            height: 22px;
+            background: linear-gradient(135deg, #EF4444, #DC2626);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: white;
+            font-weight: 700;
+            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+        }
+
+        /* ===== PREMIUM SCREEN ===== */
+        .premium-screen {
+            background: linear-gradient(135deg, #0a0a0f 0%, #13111c 100%);
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .premium-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .premium-header h2 {
+            font-size: 24px;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .plans-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .plan-card {
+            background: rgba(168, 85, 247, 0.05);
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 16px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .plan-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(233, 30, 140, 0.1) 0%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .plan-card.premium {
+            border: 2px solid #A855F7;
+            background: rgba(168, 85, 247, 0.15);
+            box-shadow: 0 8px 24px rgba(168, 85, 247, 0.2);
+        }
+
+        .plan-card.gold {
+            border: 2px solid #FFD700;
+            background: rgba(255, 215, 0, 0.1);
+            box-shadow: 0 8px 24px rgba(255, 215, 0, 0.15);
+        }
+
+        .plan-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .plan-card:hover::before {
+            opacity: 1;
+        }
+
+        .plan-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 12px;
+        }
+
+        .plan-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .plan-badge {
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 20px;
+            background: rgba(168, 85, 247, 0.3);
+            color: #E9D5FF;
+        }
+
+        .plan-price {
+            font-size: 20px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #E91E8C, #7C3AED);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+        }
+
+        .plan-features {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 18px;
+            margin-bottom: 12px;
+        }
+
+        .plan-feature {
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .plan-feature::before {
+            content: "✓";
+            color: #A855F7;
+            font-weight: 800;
+            font-size: 14px;
+        }
+
+        .select-btn {
+            width: 100%;
+            padding: 11px;
+            background: linear-gradient(135deg, #7C3AED, #A855F7);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+            letter-spacing: 0.3px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .select-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(124, 58, 237, 0.5);
+        }
+
+        .select-btn:active {
+            transform: translateY(0);
+        }
+
+        /* ===== NAVIGATION ===== */
+        .nav-bar {
+            height: 70px;
+            border-top: 1px solid rgba(168, 85, 247, 0.1);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background: rgba(10, 10, 15, 0.6);
+            backdrop-filter: blur(20px);
+            padding-bottom: 8px;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            color: rgba(255, 255, 255, 0.4);
+            transition: all 0.3s;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.2px;
+        }
+
+        .nav-item:hover {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .nav-item.active {
+            color: #A855F7;
+        }
+
+        .nav-icon {
+            font-size: 22px;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .nav-item.active .nav-icon {
+            transform: scale(1.2);
+            filter: drop-shadow(0 0 8px rgba(168, 85, 247, 0.5));
+        }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            width: 320px;
+            color: white;
+            animation: slideInRight 0.6s ease-out;
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .sidebar h2 {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #E91E8C, #7C3AED);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+        }
+
+        .sidebar-subtitle {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 28px;
+            font-weight: 500;
+        }
+
+        .feature-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .feature-item {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            padding: 12px;
+            background: rgba(168, 85, 247, 0.05);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 12px;
+            transition: all 0.3s;
+        }
+
+        .feature-item:hover {
+            background: rgba(168, 85, 247, 0.12);
+            border-color: rgba(168, 85, 247, 0.3);
+            transform: translateX(4px);
+        }
+
+        .feature-icon {
+            font-size: 22px;
+            flex-shrink: 0;
+            filter: drop-shadow(0 2px 4px rgba(233, 30, 140, 0.2));
+        }
+
+        .feature-text {
+            font-size: 13px;
+            line-height: 18px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .feature-text strong {
+            color: white;
+            display: block;
+            margin-bottom: 4px;
+            font-weight: 700;
+            letter-spacing: -0.2px;
+        }
+
+        .cta-section {
+            margin-top: 28px;
+            padding: 16px;
+            background: linear-gradient(135deg, rgba(233, 30, 140, 0.1), rgba(124, 58, 237, 0.1));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .cta-section p {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 10px;
+            line-height: 16px;
+        }
+
+        .cta-btn {
+            width: 100%;
+            padding: 10px;
+            background: linear-gradient(135deg, #E91E8C, #7C3AED);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 4px 12px rgba(233, 30, 140, 0.3);
+            letter-spacing: 0.3px;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(233, 30, 140, 0.5);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1200px) {
+            .main-container {
+                flex-direction: column;
+                gap: 40px;
+                align-items: center;
+            }
+
+            .sidebar {
+                width: 100%;
+                max-width: 500px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .phone-frame {
+                width: 360px;
+                height: 780px;
+                border-radius: 45px;
+                border: 12px solid #1a1a1a;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            .main-container {
+                gap: 20px;
+            }
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        .pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <!-- PHONE FRAME -->
+        <div class="phone-wrapper">
+            <div class="phone-frame">
+                <div class="notch">9:41</div>
+                <div class="screen">
+                    <!-- HOME SCREEN -->
+                    <div class="screen-content active" id="home-screen">
+                        <div class="home-screen">
+                            <div class="header">
+                                <div class="logo">💜 GoChat</div>
+                                <button class="premium-btn" onclick="switchScreen('premium-screen')">👑 Premium</button>
+                            </div>
+                            <div class="card-stack">
+                                <div class="profile-card">
+                                    <div class="profile-overlay"></div>
+                                    <div class="profile-info">
+                                        <div class="profile-name">Valentina, 26</div>
+                                        <div class="profile-location">📍 Bogotá, Colombia</div>
+                                        <div class="profile-bio">Amo viajar, el café y los atardeceres 🌅</div>
+                                        <div class="interests">
+                                            <div class="interest-tag">✈️ Viajes</div>
+                                            <div class="interest-tag">📸 Fotografía</div>
+                                            <div class="interest-tag">🧘 Yoga</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="action-buttons">
+                                <button class="action-btn btn-nope" onclick="actionClick(this)">✕</button>
+                                <button class="action-btn btn-super" onclick="actionClick(this)">⭐</button>
+                                <button class="action-btn btn-like" onclick="actionClick(this)">❤️</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- MATCHES SCREEN -->
+                    <div class="screen-content" id="matches-screen">
+                        <div class="matches-screen">
+                            <div class="search-header">
+                                <h2>Matches</h2>
+                                <div class="search-icon">🔍</div>
+                            </div>
+                            <div class="new-matches">
+                                <h3>
+                                    Nuevos Matches
+                                    <span class="see-all">Ver todos ></span>
+                                </h3>
+                                <div class="new-matches-list">
+                                    <div style="display: flex; flex-direction: column; align-items: center;">
+                                        <div class="match-avatar">👩</div>
+                                        <div class="match-avatar-name">Valeria</div>
+                                    </div>
+                                    <div style="display: flex; flex-direction: column; align-items: center;">
+                                        <div class="match-avatar">👩</div>
+                                        <div class="match-avatar-name">Sofía</div>
+                                    </div>
+                                    <div style="display: flex; flex-direction: column; align-items: center;">
+                                        <div class="match-avatar">👩</div>
+                                        <div class="match-avatar-name">Camila</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="conversations">
+                                <h3>Conversaciones</h3>
+                                <div class="conversation-item" onclick="chatClick()">
+                                    <div class="conversation-avatar">👩</div>
+                                    <div class="conversation-content">
+                                        <div class="conversation-name">Daniela</div>
+                                        <div class="conversation-message">¿Qué planes tienes para el fin de semana?</div>
+                                    </div>
+                                    <div class="conversation-meta">
+                                        <div class="conversation-time">2h ago</div>
+                                        <div class="unread-badge">2</div>
+                                    </div>
+                                </div>
+                                <div class="conversation-item" onclick="chatClick()">
+                                    <div class="conversation-avatar">👨</div>
+                                    <div class="conversation-content">
+                                        <div class="conversation-name">Andrés</div>
+                                        <div class="conversation-message">Jajaja, totalmente de acuerdo 😂</div>
+                                    </div>
+                                    <div class="conversation-meta">
+                                        <div class="conversation-time">5h ago</div>
+                                        <div class="unread-badge">1</div>
+                                    </div>
+                                </div>
+                                <div class="conversation-item" onclick="chatClick()">
+                                    <div class="conversation-avatar">👩</div>
+                                    <div class="conversation-content">
+                                        <div class="conversation-name">Mariana</div>
+                                        <div class="conversation-message">Me encantó esa película, ¡la recomiendo!</div>
+                                    </div>
+                                    <div class="conversation-meta">
+                                        <div class="conversation-time">1d ago</div>
+                                    </div>
+                                </div>
+                                <div class="conversation-item" onclick="chatClick()">
+                                    <div class="conversation-avatar">👨</div>
+                                    <div class="conversation-content">
+                                        <div class="conversation-name">Sebastián</div>
+                                        <div class="conversation-message">Gracias por la recomendación. 🙏</div>
+                                    </div>
+                                    <div class="conversation-meta">
+                                        <div class="conversation-time">2d ago</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PREMIUM SCREEN -->
+                    <div class="screen-content" id="premium-screen">
+                        <div class="premium-screen">
+                            <div class="premium-header">
+                                <h2>Planes Premium</h2>
+                            </div>
+                            <div class="plans-container">
+                                <div class="plan-card">
+                                    <div class="plan-header">
+                                        <div class="plan-name">Gratis</div>
+                                        <div class="plan-badge">ACTUAL</div>
+                                    </div>
+                                    <div class="plan-price">$0/mes</div>
+                                    <div class="plan-features">
+                                        <div class="plan-feature">10 Swipes/día</div>
+                                        <div class="plan-feature">1 Super Like/día</div>
+                                        <div class="plan-feature">Mensajes básicos</div>
+                                    </div>
+                                </div>
+                                <div class="plan-card premium">
+                                    <div class="plan-header">
+                                        <div class="plan-name">👑 Premium</div>
+                                        <div class="plan-badge">MÁS POPULAR</div>
+                                    </div>
+                                    <div class="plan-price">$9.99/mes</div>
+                                    <div class="plan-features">
+                                        <div class="plan-feature">Swipes ilimitados</div>
+                                        <div class="plan-feature">10 Super Likes/día</div>
+                                        <div class="plan-feature">Ver quién gustó</div>
+                                        <div class="plan-feature">Filtros avanzados</div>
+                                        <div class="plan-feature">5 Boosts/mes</div>
+                                    </div>
+                                    <button class="select-btn" onclick="selectPlan('premium')">Seleccionar</button>
+                                </div>
+                                <div class="plan-card gold">
+                                    <div class="plan-header">
+                                        <div class="plan-name">👑 Gold</div>
+                                        <div class="plan-badge">EXCLUSIVO</div>
+                                    </div>
+                                    <div class="plan-price">$19.99/mes</div>
+                                    <div class="plan-features">
+                                        <div class="plan-feature">Todo Premium</div>
+                                        <div class="plan-feature">25 Super Likes/día</div>
+                                        <div class="plan-feature">15 Boosts/mes</div>
+                                        <div class="plan-feature">Modo Invisible</div>
+                                        <div class="plan-feature">Rewind ilimitado</div>
+                                    </div>
+                                    <button class="select-btn" onclick="selectPlan('gold')">Seleccionar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="nav-bar">
+                    <div class="nav-item active" onclick="switchScreen('home-screen')">
+                        <div class="nav-icon">🏠</div>
+                        <div>Home</div>
+                    </div>
+                    <div class="nav-item" onclick="switchScreen('matches-screen')">
+                        <div class="nav-icon">💜</div>
+                        <div>Matches</div>
+                    </div>
+                    <div class="nav-item" onclick="switchScreen('premium-screen')">
+                        <div class="nav-icon">👤</div>
+                        <div>Perfil</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SIDEBAR -->
+        <div class="sidebar">
+            <h2>✨ GoChat</h2>
+            <p class="sidebar-subtitle">Aplicación de citas moderna y segura</p>
+            <div class="feature-list">
+                <div class="feature-item">
+                    <div class="feature-icon">🔐</div>
+                    <div class="feature-text">
+                        <strong>Verificación de Edad</strong>
+                        Cumplimiento obligatorio de 18+ años para máxima seguridad
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">💬</div>
+                    <div class="feature-text">
+                        <strong>Chat Privado</strong>
+                        Mensajes seguros 1 a 1 con encriptación
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">💳</div>
+                    <div class="feature-text">
+                        <strong>Monetización</strong>
+                        Planes Premium y Gold con características exclusivas
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🎨</div>
+                    <div class="feature-text">
+                        <strong>Diseño Premium</strong>
+                        Interfaz dark mode con gradientes y animaciones suaves
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">📱</div>
+                    <div class="feature-text">
+                        <strong>Google Play Ready</strong>
+                        Cumple con todos los requisitos de publicación
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">⚡</div>
+                    <div class="feature-text">
+                        <strong>Rendimiento</strong>
+                        Animaciones fluidas y respuesta instantánea
+                    </div>
+                </div>
+            </div>
+            <div class="cta-section">
+                <p>¿Listo para lanzar tu app?</p>
+                <button class="cta-btn" onclick="alert('¡Contacta con nosotros para publicar en Google Play!')">Publicar Ahora</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchScreen(screenId) {
+            document.querySelectorAll('.screen-content').forEach(screen => {
+                screen.classList.remove('active');
+            });
+
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            document.getElementById(screenId).classList.add('active');
+
+            const navItems = document.querySelectorAll('.nav-item');
+            if (screenId === 'home-screen') {
+                navItems[0].classList.add('active');
+            } else if (screenId === 'matches-screen') {
+                navItems[1].classList.add('active');
+            } else if (screenId === 'premium-screen') {
+                navItems[2].classList.add('active');
+            }
+        }
+
+        function actionClick(btn) {
+            btn.style.animation = 'none';
+            setTimeout(() => {
+                btn.style.animation = '';
+            }, 10);
+        }
+
+        function chatClick() {
+            alert('💬 Abriendo conversación...');
+        }
+
+        function selectPlan(plan) {
+            const planName = plan === 'premium' ? 'Premium ($9.99/mes)' : 'Gold ($19.99/mes)';
+            alert(`✅ Seleccionaste ${planName}\n\nEn la app real, aquí se procesaría el pago.`);
+        }
+
+        // Smooth scroll behavior
+        document.querySelectorAll('.screen').forEach(screen => {
+            screen.addEventListener('scroll', function() {
+                // Smooth scroll handling
+            });
+        });
+
+        // Add keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowLeft') {
+                const navItems = document.querySelectorAll('.nav-item');
+                const currentActive = document.querySelector('.nav-item.active');
+                const currentIndex = Array.from(navItems).indexOf(currentActive);
+                if (currentIndex > 0) {
+                    navItems[currentIndex - 1].click();
+                }
+            } else if (e.key === 'ArrowRight') {
+                const navItems = document.querySelectorAll('.nav-item');
+                const currentActive = document.querySelector('.nav-item.active');
+                const currentIndex = Array.from(navItems).indexOf(currentActive);
+                if (currentIndex < navItems.length - 1) {
+                    navItems[currentIndex + 1].click();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
