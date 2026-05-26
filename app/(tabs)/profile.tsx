@@ -2,12 +2,14 @@ import { useRouter } from "expo-router";
 import { Image, ScrollView, Text, TouchableOpacity, View, Alert, StyleSheet } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { ScreenContainer } from "@/components/screen-container";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useAuth } from "@/hooks/use-auth";
 import { trpc } from "@/lib/trpc";
 
 export default function ProfileScreen() {
   const router = useRouter();
   const { user, logout, isAuthenticated } = useAuth();
+  const insets = useSafeAreaInsets();
 
   const profileQuery = trpc.profile.get.useQuery(undefined, { enabled: isAuthenticated, retry: false });
   const profile = profileQuery.data;
@@ -58,10 +60,10 @@ export default function ProfileScreen() {
     <View style={{ flex: 1, backgroundColor: "#0A0A0F" }}>
       <LinearGradient colors={["#0A0A0F", "#13111C"]} style={StyleSheet.absoluteFillObject} />
 
-      <ScreenContainer containerClassName="bg-transparent">
+      <ScreenContainer containerClassName="bg-transparent" edges={["left", "right"]}>
         <ScrollView showsVerticalScrollIndicator={false}>
           {/* Header */}
-          <View style={{ paddingHorizontal: 20, paddingTop: 28, paddingBottom: 16, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+          <View style={{ paddingHorizontal: 20, paddingTop: insets.top + 12, paddingBottom: 16, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
             <Text style={{ fontSize: 26, fontWeight: "900", color: "#fff", letterSpacing: -0.5 }}>Mi Perfil</Text>
             <TouchableOpacity
               onPress={() => router.push("/setup-profile" as never)}

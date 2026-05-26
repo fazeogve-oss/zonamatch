@@ -13,6 +13,7 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { ScreenContainer } from "@/components/screen-container";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useColors } from "@/hooks/use-colors";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/hooks/use-auth";
@@ -145,6 +146,7 @@ export default function DiscoverScreen() {
   const router = useRouter();
   const colors = useColors();
   const { isAuthenticated } = useAuth();
+  const insets = useSafeAreaInsets();
   const [profiles, setProfiles] = useState<UserProfile[]>(DEMO_PROFILES);
   const [showMatch, setShowMatch] = useState<UserProfile | null>(null);
   const [swipesUsed, setSwipesUsed] = useState(0);
@@ -184,9 +186,9 @@ export default function DiscoverScreen() {
     <View style={{ flex: 1, backgroundColor: "#0A0A0F" }}>
       <LinearGradient colors={["#0A0A0F", "#13111C"]} style={StyleSheet.absoluteFillObject} />
 
-      <ScreenContainer containerClassName="bg-transparent">
+      <ScreenContainer containerClassName="bg-transparent" edges={["left", "right"]}>
         {/* Header */}
-        <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingHorizontal: 20, paddingTop: 28, paddingBottom: 14 }}>
+        <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingHorizontal: 20, paddingTop: insets.top + 12, paddingBottom: 14 }}>
           <View>
             <Text style={{ fontSize: 22, fontWeight: "900", color: "#fff", letterSpacing: -0.5 }}>💜 GoChat</Text>
           </View>

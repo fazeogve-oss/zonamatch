@@ -3,6 +3,7 @@ import { useState } from "react";
 import { FlatList, Image, Text, TextInput, TouchableOpacity, View, StyleSheet, ActivityIndicator } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { ScreenContainer } from "@/components/screen-container";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/hooks/use-auth";
 import type { MatchWithProfile } from "@/shared/types";
@@ -26,6 +27,7 @@ function formatTime(date: Date | null): string {
 export default function MatchesScreen() {
   const router = useRouter();
   const { isAuthenticated } = useAuth();
+  const insets = useSafeAreaInsets();
   const [search, setSearch] = useState("");
 
   const matchesQuery = trpc.matches.list.useQuery(undefined, { enabled: isAuthenticated, retry: false });
@@ -41,9 +43,9 @@ export default function MatchesScreen() {
     <View style={{ flex: 1, backgroundColor: "#0A0A0F" }}>
       <LinearGradient colors={["#0A0A0F", "#13111C"]} style={StyleSheet.absoluteFillObject} />
 
-      <ScreenContainer containerClassName="bg-transparent">
+      <ScreenContainer containerClassName="bg-transparent" edges={["left", "right"]}>
         {/* Header */}
-        <View style={{ paddingHorizontal: 20, paddingTop: 28, paddingBottom: 16 }}>
+        <View style={{ paddingHorizontal: 20, paddingTop: insets.top + 12, paddingBottom: 16 }}>
           <Text style={{ fontSize: 26, fontWeight: "900", color: "#fff", letterSpacing: -0.5, marginBottom: 14 }}>
             Mensajes 💬
           </Text>
