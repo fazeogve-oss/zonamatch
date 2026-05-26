@@ -1,13 +1,12 @@
 import { useRouter } from "expo-router";
-import { Image, ScrollView, Text, TouchableOpacity, View, Alert } from "react-native";
+import { Image, ScrollView, Text, TouchableOpacity, View, Alert, StyleSheet } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 import { ScreenContainer } from "@/components/screen-container";
-import { useColors } from "@/hooks/use-colors";
 import { useAuth } from "@/hooks/use-auth";
 import { trpc } from "@/lib/trpc";
 
 export default function ProfileScreen() {
   const router = useRouter();
-  const colors = useColors();
   const { user, logout, isAuthenticated } = useAuth();
 
   const profileQuery = trpc.profile.get.useQuery(undefined, { enabled: isAuthenticated, retry: false });
@@ -34,127 +33,151 @@ export default function ProfileScreen() {
 
   if (!isAuthenticated) {
     return (
-      <ScreenContainer containerClassName="bg-background">
-        <View style={{ flex: 1, alignItems: "center", justifyContent: "center", gap: 16, padding: 32 }}>
-          <Text style={{ fontSize: 40 }}>👤</Text>
-          <Text style={{ fontSize: 20, fontWeight: "700", color: colors.foreground, textAlign: "center" }}>
-            Inicia sesión para ver tu perfil
-          </Text>
-          <TouchableOpacity
-            onPress={() => router.replace("/(auth)/onboarding" as never)}
-            style={{ backgroundColor: colors.primary, borderRadius: 16, paddingHorizontal: 32, paddingVertical: 14 }}
-          >
-            <Text style={{ color: "#fff", fontWeight: "700", fontSize: 16 }}>Iniciar sesión</Text>
-          </TouchableOpacity>
-        </View>
-      </ScreenContainer>
+      <View style={{ flex: 1, backgroundColor: "#0A0A0F" }}>
+        <LinearGradient colors={["#0A0A0F", "#1E1B4B"]} style={StyleSheet.absoluteFillObject} />
+        <ScreenContainer containerClassName="bg-transparent">
+          <View style={{ flex: 1, alignItems: "center", justifyContent: "center", gap: 20, padding: 32 }}>
+            <View style={{ width: 90, height: 90, borderRadius: 45, backgroundColor: "rgba(168,85,247,0.15)", alignItems: "center", justifyContent: "center", borderWidth: 1.5, borderColor: "rgba(168,85,247,0.4)" }}>
+              <Text style={{ fontSize: 40 }}>👤</Text>
+            </View>
+            <Text style={{ fontSize: 22, fontWeight: "700", color: "#fff", textAlign: "center" }}>
+              Inicia sesión para ver tu perfil
+            </Text>
+            <TouchableOpacity onPress={() => router.replace("/(auth)/onboarding" as never)} style={{ borderRadius: 18, overflow: "hidden" }}>
+              <LinearGradient colors={["#7C3AED", "#A855F7", "#EC4899"]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={{ paddingHorizontal: 36, paddingVertical: 16 }}>
+                <Text style={{ color: "#fff", fontWeight: "800", fontSize: 16 }}>Iniciar sesión</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          </View>
+        </ScreenContainer>
+      </View>
     );
   }
 
   return (
-    <ScreenContainer containerClassName="bg-background">
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {/* Header */}
-        <View style={{ paddingHorizontal: 20, paddingVertical: 16, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-          <Text style={{ fontSize: 24, fontWeight: "800", color: colors.foreground }}>Mi Perfil</Text>
-          <TouchableOpacity onPress={() => router.push("/setup-profile" as never)} style={{ backgroundColor: colors.surface, borderRadius: 20, paddingHorizontal: 14, paddingVertical: 8, borderWidth: 1, borderColor: colors.border }}>
-            <Text style={{ color: colors.primary, fontWeight: "600", fontSize: 14 }}>✏️ Editar</Text>
-          </TouchableOpacity>
-        </View>
+    <View style={{ flex: 1, backgroundColor: "#0A0A0F" }}>
+      <LinearGradient colors={["#0A0A0F", "#13111C"]} style={StyleSheet.absoluteFillObject} />
 
-        {/* Profile photo */}
-        <View style={{ alignItems: "center", paddingVertical: 20 }}>
-          <View style={{ position: "relative" }}>
-            <Image
-              source={{ uri: photos[0] }}
-              style={{ width: 120, height: 120, borderRadius: 60, borderWidth: 3, borderColor: colors.primary }}
-            />
+      <ScreenContainer containerClassName="bg-transparent">
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {/* Header */}
+          <View style={{ paddingHorizontal: 20, paddingTop: 8, paddingBottom: 16, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+            <Text style={{ fontSize: 26, fontWeight: "900", color: "#fff", letterSpacing: -0.5 }}>Mi Perfil</Text>
+            <TouchableOpacity
+              onPress={() => router.push("/setup-profile" as never)}
+              style={{ backgroundColor: "rgba(168,85,247,0.15)", borderRadius: 20, paddingHorizontal: 14, paddingVertical: 8, borderWidth: 1, borderColor: "rgba(168,85,247,0.4)" }}
+            >
+              <Text style={{ color: "#C084FC", fontWeight: "700", fontSize: 13 }}>✏️ Editar</Text>
+            </TouchableOpacity>
+          </View>
+
+          {/* Profile hero */}
+          <View style={{ alignItems: "center", paddingVertical: 10, marginBottom: 20 }}>
+            <View style={{ position: "relative", marginBottom: 16 }}>
+              <LinearGradient colors={["#7C3AED", "#A855F7", "#EC4899"]} style={{ width: 118, height: 118, borderRadius: 59, padding: 3 }}>
+                <Image source={{ uri: photos[0] }} style={{ width: "100%", height: "100%", borderRadius: 56 }} />
+              </LinearGradient>
+              {profile?.isPremium && (
+                <View style={{ position: "absolute", bottom: 2, right: 2, width: 28, height: 28, borderRadius: 14, backgroundColor: "#F59E0B", alignItems: "center", justifyContent: "center", borderWidth: 2, borderColor: "#0A0A0F" }}>
+                  <Text style={{ fontSize: 14 }}>👑</Text>
+                </View>
+              )}
+            </View>
+            <Text style={{ fontSize: 24, fontWeight: "800", color: "#fff", letterSpacing: -0.5, marginBottom: 4 }}>
+              {profile?.displayName || user?.name || "Tu nombre"}
+              {age ? `, ${age}` : ""}
+            </Text>
+            {profile?.city && (
+              <Text style={{ color: "rgba(255,255,255,0.5)", fontSize: 14 }}>📍 {profile.city}</Text>
+            )}
             {profile?.isPremium && (
-              <View style={{ position: "absolute", bottom: 0, right: 0, backgroundColor: "#FFD700", borderRadius: 12, paddingHorizontal: 6, paddingVertical: 2 }}>
-                <Text style={{ fontSize: 12 }}>👑</Text>
-              </View>
+              <LinearGradient colors={["#F59E0B", "#EF4444"]} style={{ borderRadius: 20, paddingHorizontal: 14, paddingVertical: 5, marginTop: 8 }}>
+                <Text style={{ color: "#fff", fontWeight: "700", fontSize: 12 }}>👑 {profile.premiumPlan === "gold" ? "Gold" : "Premium"}</Text>
+              </LinearGradient>
             )}
           </View>
-          <Text style={{ fontSize: 22, fontWeight: "700", color: colors.foreground, marginTop: 12 }}>
-            {profile?.displayName || user?.name || "Tu nombre"}
-            {age ? `, ${age}` : ""}
-          </Text>
-          {profile?.city && (
-            <Text style={{ color: colors.muted, fontSize: 14, marginTop: 4 }}>📍 {profile.city}</Text>
-          )}
-        </View>
 
-        {/* Stats */}
-        <View style={{ flexDirection: "row", marginHorizontal: 20, marginBottom: 20, backgroundColor: colors.surface, borderRadius: 16, padding: 16, gap: 0 }}>
-          <View style={{ flex: 1, alignItems: "center" }}>
-            <Text style={{ fontSize: 22, fontWeight: "700", color: colors.primary }}>
-              {profile?.swipesLeft === 9999 ? "∞" : profile?.swipesLeft ?? 20}
-            </Text>
-            <Text style={{ color: colors.muted, fontSize: 12, marginTop: 2 }}>Swipes</Text>
-          </View>
-          <View style={{ width: 1, backgroundColor: colors.border }} />
-          <View style={{ flex: 1, alignItems: "center" }}>
-            <Text style={{ fontSize: 22, fontWeight: "700", color: "#00B4D8" }}>
-              {profile?.superLikesLeft ?? 1}
-            </Text>
-            <Text style={{ color: colors.muted, fontSize: 12, marginTop: 2 }}>Super Likes</Text>
-          </View>
-          <View style={{ width: 1, backgroundColor: colors.border }} />
-          <View style={{ flex: 1, alignItems: "center" }}>
-            <Text style={{ fontSize: 22, fontWeight: "700", color: "#FFD700" }}>
-              {profile?.boostsLeft ?? 0}
-            </Text>
-            <Text style={{ color: colors.muted, fontSize: 12, marginTop: 2 }}>Boosts</Text>
-          </View>
-        </View>
-
-        {/* Bio */}
-        {profile?.bio && (
-          <View style={{ marginHorizontal: 20, marginBottom: 20, backgroundColor: colors.surface, borderRadius: 16, padding: 16 }}>
-            <Text style={{ fontSize: 14, fontWeight: "600", color: colors.muted, marginBottom: 8, textTransform: "uppercase", letterSpacing: 0.5 }}>Sobre mí</Text>
-            <Text style={{ color: colors.foreground, fontSize: 15, lineHeight: 22 }}>{profile.bio}</Text>
-          </View>
-        )}
-
-        {/* Interests */}
-        {interests.length > 0 && (
-          <View style={{ marginHorizontal: 20, marginBottom: 20 }}>
-            <Text style={{ fontSize: 14, fontWeight: "600", color: colors.muted, marginBottom: 12, textTransform: "uppercase", letterSpacing: 0.5 }}>Intereses</Text>
-            <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
-              {interests.map((interest) => (
-                <View key={interest} style={{ paddingHorizontal: 14, paddingVertical: 7, borderRadius: 20, backgroundColor: colors.primary + "20", borderWidth: 1, borderColor: colors.primary + "40" }}>
-                  <Text style={{ color: colors.primary, fontWeight: "500", fontSize: 13 }}>{interest}</Text>
+          {/* Stats */}
+          <View style={{ marginHorizontal: 20, marginBottom: 20, borderRadius: 20, overflow: "hidden", borderWidth: 1, borderColor: "rgba(168,85,247,0.2)" }}>
+            <LinearGradient colors={["rgba(124,58,237,0.15)", "rgba(168,85,247,0.08)"]} style={{ flexDirection: "row", padding: 20 }}>
+              {[
+                { value: profile?.swipesLeft === 9999 ? "∞" : String(profile?.swipesLeft ?? 20), label: "Swipes", color: "#A855F7" },
+                { value: String(profile?.superLikesLeft ?? 1), label: "Super Likes", color: "#60A5FA" },
+                { value: String(profile?.boostsLeft ?? 0), label: "Boosts", color: "#F59E0B" },
+              ].map((stat, i, arr) => (
+                <View key={stat.label} style={{ flex: 1, alignItems: "center" }}>
+                  <Text style={{ fontSize: 26, fontWeight: "800", color: stat.color, marginBottom: 4 }}>{stat.value}</Text>
+                  <Text style={{ color: "rgba(255,255,255,0.4)", fontSize: 12 }}>{stat.label}</Text>
+                  {i < arr.length - 1 && <View style={{ position: "absolute", right: 0, top: 8, bottom: 8, width: 1, backgroundColor: "rgba(255,255,255,0.1)" }} />}
                 </View>
               ))}
-            </View>
+            </LinearGradient>
           </View>
-        )}
 
-        {/* Premium CTA */}
-        {!profile?.isPremium && (
-          <TouchableOpacity
-            onPress={() => router.push("/premium" as never)}
-            style={{ marginHorizontal: 20, marginBottom: 20, borderRadius: 16, overflow: "hidden", backgroundColor: "#FFD700" + "22", borderWidth: 1.5, borderColor: "#FFD700", padding: 16, flexDirection: "row", alignItems: "center", gap: 12 }}
-          >
-            <Text style={{ fontSize: 28 }}>👑</Text>
-            <View style={{ flex: 1 }}>
-              <Text style={{ fontSize: 16, fontWeight: "700", color: "#B8860B" }}>Hazte Premium</Text>
-              <Text style={{ color: "#B8860B", fontSize: 13, opacity: 0.8 }}>Swipes ilimitados, ver quién te gustó y más</Text>
+          {/* Bio */}
+          {profile?.bio ? (
+            <View style={{ marginHorizontal: 20, marginBottom: 16, backgroundColor: "rgba(255,255,255,0.05)", borderRadius: 18, padding: 18, borderWidth: 1, borderColor: "rgba(255,255,255,0.08)" }}>
+              <Text style={{ color: "rgba(255,255,255,0.4)", fontSize: 11, fontWeight: "700", letterSpacing: 1.5, textTransform: "uppercase", marginBottom: 10 }}>Sobre mí</Text>
+              <Text style={{ color: "rgba(255,255,255,0.8)", fontSize: 15, lineHeight: 24 }}>{profile.bio}</Text>
             </View>
-            <Text style={{ color: "#B8860B", fontSize: 18 }}>›</Text>
-          </TouchableOpacity>
-        )}
+          ) : null}
 
-        {/* Settings */}
-        <View style={{ marginHorizontal: 20, marginBottom: 32, gap: 12 }}>
-          <TouchableOpacity
-            onPress={handleLogout}
-            style={{ backgroundColor: colors.surface, borderRadius: 16, padding: 16, alignItems: "center", borderWidth: 1, borderColor: colors.border }}
-          >
-            <Text style={{ color: colors.error, fontWeight: "600", fontSize: 16 }}>Cerrar sesión</Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
-    </ScreenContainer>
+          {/* Interests */}
+          {interests.length > 0 && (
+            <View style={{ marginHorizontal: 20, marginBottom: 16 }}>
+              <Text style={{ color: "rgba(255,255,255,0.4)", fontSize: 11, fontWeight: "700", letterSpacing: 1.5, textTransform: "uppercase", marginBottom: 12 }}>Intereses</Text>
+              <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
+                {interests.map((interest) => (
+                  <View key={interest} style={{ paddingHorizontal: 14, paddingVertical: 7, borderRadius: 20, backgroundColor: "rgba(168,85,247,0.15)", borderWidth: 1, borderColor: "rgba(168,85,247,0.4)" }}>
+                    <Text style={{ color: "#C084FC", fontWeight: "600", fontSize: 13 }}>{interest}</Text>
+                  </View>
+                ))}
+              </View>
+            </View>
+          )}
+
+          {/* Premium CTA */}
+          {!profile?.isPremium && (
+            <TouchableOpacity onPress={() => router.push("/premium" as never)} style={{ marginHorizontal: 20, marginBottom: 16, borderRadius: 18, overflow: "hidden" }}>
+              <LinearGradient colors={["rgba(245,158,11,0.2)", "rgba(239,68,68,0.15)"]} style={{ padding: 18, flexDirection: "row", alignItems: "center", gap: 14, borderWidth: 1, borderColor: "rgba(245,158,11,0.4)", borderRadius: 18 }}>
+                <Text style={{ fontSize: 30 }}>👑</Text>
+                <View style={{ flex: 1 }}>
+                  <Text style={{ fontSize: 16, fontWeight: "700", color: "#FCD34D" }}>Hazte Premium</Text>
+                  <Text style={{ color: "rgba(252,211,77,0.7)", fontSize: 13, marginTop: 2 }}>Swipes ilimitados · Ver quién te gustó</Text>
+                </View>
+                <Text style={{ color: "#FCD34D", fontSize: 20 }}>›</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          )}
+
+          {/* Menu options */}
+          <View style={{ marginHorizontal: 20, marginBottom: 32, gap: 10 }}>
+            {[
+              { icon: "🔔", label: "Notificaciones", action: () => {} },
+              { icon: "🔒", label: "Privacidad", action: () => {} },
+              { icon: "❓", label: "Ayuda y soporte", action: () => {} },
+            ].map((item) => (
+              <TouchableOpacity
+                key={item.label}
+                onPress={item.action}
+                style={{ flexDirection: "row", alignItems: "center", gap: 14, backgroundColor: "rgba(255,255,255,0.05)", borderRadius: 16, padding: 16, borderWidth: 1, borderColor: "rgba(255,255,255,0.07)" }}
+              >
+                <Text style={{ fontSize: 20 }}>{item.icon}</Text>
+                <Text style={{ color: "rgba(255,255,255,0.8)", fontSize: 15, flex: 1 }}>{item.label}</Text>
+                <Text style={{ color: "rgba(255,255,255,0.3)", fontSize: 18 }}>›</Text>
+              </TouchableOpacity>
+            ))}
+
+            <TouchableOpacity
+              onPress={handleLogout}
+              style={{ flexDirection: "row", alignItems: "center", gap: 14, backgroundColor: "rgba(239,68,68,0.08)", borderRadius: 16, padding: 16, borderWidth: 1, borderColor: "rgba(239,68,68,0.25)", marginTop: 4 }}
+            >
+              <Text style={{ fontSize: 20 }}>🚪</Text>
+              <Text style={{ color: "#F87171", fontSize: 15, fontWeight: "600", flex: 1 }}>Cerrar sesión</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </ScreenContainer>
+    </View>
   );
 }

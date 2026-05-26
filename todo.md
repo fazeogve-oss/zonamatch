@@ -56,3 +56,16 @@
 
 ## Entrega
 - [x] Checkpoint final
+
+## Rediseño Visual (inspirado en Purple)
+- [x] Nuevo logo neon heart con gradiente violeta/rosa
+- [x] Paleta oscura premium (#0A0A0F + violeta/rosa neón)
+- [x] Tab bar dark con gradiente activo en íconos
+- [x] Pantalla onboarding dark con gradientes y blobs decorativos
+- [x] Pantalla login dark premium
+- [x] Pantalla swipe dark premium con gradientes
+- [x] Pantalla matches dark premium con buscador
+- [x] Pantalla chat dark premium con burbujas gradiente
+- [x] Pantalla perfil dark premium con stats y menú
+- [x] Pantalla premium dark con cards glassmorphism
+- [x] Pantalla setup-profile dark con progress bar gradiente
