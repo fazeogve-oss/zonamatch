@@ -6,7 +6,7 @@ import type { ExpoConfig } from "expo/config";
 // e.g., "my-app" created at 2024-01-15 10:30:45 -> "space.manus.my.app.t20240115103045"
 // Bundle ID can only contain letters, numbers, and dots
 // Android requires each dot-separated segment to start with a letter
-const rawBundleId = "com.app.dating_app";
+const rawBundleId = "com.gochat.dating";
 const bundleId =
   rawBundleId
     .replace(/[-_]/g, ".") // Replace hyphens/underscores with dots
@@ -29,10 +29,10 @@ const schemeFromBundleId = `manus${timestamp}`;
 const env = {
   // App branding - update these values directly (do not use env vars)
   appName: "GoChat",
-  appSlug: "dating_app",
+  appSlug: "gochat",
   // S3 URL of the app logo - set this to the URL returned by generate_image when creating custom logo
   // Leave empty to use the default icon from assets/images/icon.png
-  logoUrl: "https://d2xsxph8kpxj0f.cloudfront.net/310519663697757650/imJVF6iuBS5Ct2iTUnEBfG/zonamatch-icon-v2-Te2jFLxDgYTo56aXMwrz6V.png",
+  logoUrl: "https://d2xsxph8kpxj0f.cloudfront.net/310519663698946382/PWcBFr2CyFnpHZfaQXmTPp/icon-WsX9SuK4LkM7Q6vJFuecRF.png",
   scheme: schemeFromBundleId,
   iosBundleId: bundleId,
   androidPackage: bundleId,
@@ -50,13 +50,17 @@ const config: ExpoConfig = {
   ios: {
     supportsTablet: true,
     bundleIdentifier: env.iosBundleId,
-    "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
-      }
+    infoPlist: {
+      ITSAppUsesNonExemptEncryption: false,
+      NSCameraUsageDescription: "Necesitamos acceso a tu cámara para tomar fotos de perfil",
+      NSPhotoLibraryUsageDescription: "Necesitamos acceso a tu galería para seleccionar fotos de perfil",
+      NSLocationWhenInUseUsageDescription: "Usamos tu ubicación para mostrarte perfiles cercanos",
+      NSUserTrackingUsageDescription: "Usamos tracking para mejorar tu experiencia en GoChat",
+    },
   },
   android: {
     adaptiveIcon: {
-      backgroundColor: "#E6F4FE",
+      backgroundColor: "#0A0A0F",
       foregroundImage: "./assets/images/android-icon-foreground.png",
       backgroundImage: "./assets/images/android-icon-background.png",
       monochromeImage: "./assets/images/android-icon-monochrome.png",
@@ -64,7 +68,14 @@ const config: ExpoConfig = {
     edgeToEdgeEnabled: true,
     predictiveBackGestureEnabled: false,
     package: env.androidPackage,
-    permissions: ["POST_NOTIFICATIONS"],
+    permissions: [
+      "POST_NOTIFICATIONS",
+      "CAMERA",
+      "READ_EXTERNAL_STORAGE",
+      "WRITE_EXTERNAL_STORAGE",
+      "ACCESS_FINE_LOCATION",
+      "ACCESS_COARSE_LOCATION",
+    ],
     intentFilters: [
       {
         action: "VIEW",
@@ -105,9 +116,9 @@ const config: ExpoConfig = {
         image: "./assets/images/splash-icon.png",
         imageWidth: 200,
         resizeMode: "contain",
-        backgroundColor: "#ffffff",
+        backgroundColor: "#0A0A0F",
         dark: {
-          backgroundColor: "#000000",
+          backgroundColor: "#0A0A0F",
         },
       },
     ],
@@ -117,6 +128,9 @@ const config: ExpoConfig = {
         android: {
           buildArchs: ["armeabi-v7a", "arm64-v8a"],
           minSdkVersion: 24,
+        },
+        ios: {
+          deploymentTarget: "13.0",
         },
       },
     ],

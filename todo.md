@@ -1,4 +1,4 @@
-# ZonaMatch - TODO
+# GoChat - TODO (Pulido para Google Play)
 
 ## Setup y Configuración
 - [x] Configurar colores de marca (rosa/magenta) en theme.config.js
@@ -45,19 +45,26 @@
 - [x] API de matches y mensajes
 - [x] API de premium
 
-## Pendiente / Mejoras futuras
-- [ ] Subida real de fotos de perfil
-- [ ] Notificaciones push al recibir match o mensaje
-- [ ] Filtros avanzados (distancia, edad, intereses)
-- [ ] Rewind (deshacer último swipe) - solo premium
-- [ ] Modo incógnito - solo premium
-- [ ] Integración con pasarela de pagos real (Stripe, etc.)
-- [ ] Actualización en tiempo real del chat (WebSocket/polling)
+## Pulido para Google Play
+- [x] Renombrar app a GoChat en toda la configuración
+- [x] Generar logo de GoChat (512x512)
+- [x] Crear pantalla Age Gate (verificación 18+)
+- [x] Crear pantalla de Política de Privacidad
+- [x] Crear pantalla de Términos de Servicio
+- [ ] Configurar Google Play Billing
+- [ ] Implementar compras in-app (suscripciones y consumibles)
+- [ ] Configurar permisos en app.config.ts
+- [ ] Implementar solicitud de permisos en runtime
+- [ ] Configurar notificaciones push
+- [ ] Validar flujos end-to-end
+- [ ] Crear documentación de privacidad
+- [ ] Generar APK/AAB para testing
+- [ ] Crear checklist final para publicación
 
 ## Entrega
-- [x] Checkpoint final
+- [ ] Checkpoint final (después de pulido)
 
-## Rediseño Visual (inspirado en Purple)
+## Rediseño Visual (inspirado en Purple) - COMPLETADO
 - [x] Nuevo logo neon heart con gradiente violeta/rosa
 - [x] Paleta oscura premium (#0A0A0F + violeta/rosa neón)
 - [x] Tab bar dark con gradiente activo en íconos
