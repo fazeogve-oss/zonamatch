@@ -19,12 +19,12 @@ export default function LoginScreen() {
       <ScreenContainer containerClassName="bg-transparent" edges={["top", "bottom", "left", "right"]}>
         <View style={{ flex: 1, justifyContent: "space-between", paddingHorizontal: 28 }}>
           {/* Logo area */}
-          <View style={{ alignItems: "center", marginTop: 60 }}>
+          <View style={{ alignItems: "center", marginTop: 90 }}>
             <View style={{ width: 90, height: 90, borderRadius: 28, backgroundColor: "rgba(168,85,247,0.15)", alignItems: "center", justifyContent: "center", borderWidth: 1.5, borderColor: "rgba(168,85,247,0.4)", marginBottom: 20 }}>
               <Text style={{ fontSize: 44 }}>💜</Text>
             </View>
             <Text style={{ fontSize: 36, fontWeight: "900", color: "#fff", letterSpacing: -1, marginBottom: 8 }}>
-              ZonaMatch
+              GoChat
             </Text>
             <Text style={{ fontSize: 15, color: "rgba(255,255,255,0.5)", textAlign: "center", lineHeight: 22 }}>
               Donde las conexiones reales{"\n"}comienzan

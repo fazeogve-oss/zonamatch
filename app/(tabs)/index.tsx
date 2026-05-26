@@ -186,9 +186,9 @@ export default function DiscoverScreen() {
 
       <ScreenContainer containerClassName="bg-transparent">
         {/* Header */}
-        <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingHorizontal: 20, paddingVertical: 14 }}>
+        <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingHorizontal: 20, paddingTop: 28, paddingBottom: 14 }}>
           <View>
-            <Text style={{ fontSize: 22, fontWeight: "900", color: "#fff", letterSpacing: -0.5 }}>💜 ZonaMatch</Text>
+            <Text style={{ fontSize: 22, fontWeight: "900", color: "#fff", letterSpacing: -0.5 }}>💜 GoChat</Text>
           </View>
           <TouchableOpacity
             onPress={() => router.push("/premium" as never)}

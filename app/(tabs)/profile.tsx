@@ -61,7 +61,7 @@ export default function ProfileScreen() {
       <ScreenContainer containerClassName="bg-transparent">
         <ScrollView showsVerticalScrollIndicator={false}>
           {/* Header */}
-          <View style={{ paddingHorizontal: 20, paddingTop: 8, paddingBottom: 16, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+          <View style={{ paddingHorizontal: 20, paddingTop: 28, paddingBottom: 16, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
             <Text style={{ fontSize: 26, fontWeight: "900", color: "#fff", letterSpacing: -0.5 }}>Mi Perfil</Text>
             <TouchableOpacity
               onPress={() => router.push("/setup-profile" as never)}

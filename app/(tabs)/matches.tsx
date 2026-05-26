@@ -43,7 +43,7 @@ export default function MatchesScreen() {
 
       <ScreenContainer containerClassName="bg-transparent">
         {/* Header */}
-        <View style={{ paddingHorizontal: 20, paddingTop: 8, paddingBottom: 16 }}>
+        <View style={{ paddingHorizontal: 20, paddingTop: 28, paddingBottom: 16 }}>
           <Text style={{ fontSize: 26, fontWeight: "900", color: "#fff", letterSpacing: -0.5, marginBottom: 14 }}>
             Mensajes 💬
           </Text>
